@@ -3,22 +3,23 @@ const data = require('../data');
 
 router.get('/search', async (req, res) => {
   const { keyword } = req.query;
-  if(!keyword) {
+  console.log(decodeURIComponent(keyword));
+  if (!keyword || !keyword.trim()) {
     return res.json({
       errocde: 1,
       message: 'invalid keyword'
     })
   }
   const matchRes = data.filter(
-    ({ keywords }) => 
-      String(keywords).toLocaleLowerCase().includes(String(keyword).toLocaleLowerCase()
-    )
+    ({ keywords }) => {
+      const key = String(keyword).trim().toLocaleLowerCase()
+      return String(keywords).toLocaleLowerCase().includes(key)
+    }
   )
   res.json({
     errcode: 0,
     data: matchRes
   })
-
 })
 
 module.exports = router;

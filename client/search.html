@@ -37,8 +37,8 @@
 		<!--<div class="searchtitle">Grammatical Deviation</div>-->
 		<div class="searchbox">
 			<form action="search.html" method="get">
-				<input name="key" type="text" class="searchinput" value="Search for Parallelism or Deviation">
-				<input name="go" type="image" src="images/search.png">
+				<input id="key" name="key" type="text" class="searchinput" placeholder="Search for Parallelism or Deviation">
+				<img id="go" src="images/search.png" />
 			</form>
 		</div>
 
@@ -53,22 +53,16 @@
 	<script src="js/jquery-1.10.1.js"></script>
 	<script>
 
-		function getUrl() {
-			var url = location.search;
-			var theRequest = new Object();
-			if (url.indexOf("?") != -1) {
-				var str = url.substr(1);
-				strs = str.split("&");
-				for (var i = 0; i < strs.length; i++) {
-					theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
-				}
-			}
-			return theRequest;
+
+		function getUrlParam(key) {
+			var url = window.location.search;
+			var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
+			var result = url.substr(1).match(reg);
+			return result ? decodeURIComponent(result[2]) : null;
 		}
 
-		var get_url = getUrl();
-		key = get_url["key"];
-		fetch(`/api/search?keyword=${key}`)
+		key = getUrlParam("key");
+		fetch(`/api/search?keyword=${encodeURIComponent(key)}`)
 			.then(res => res.json())
 			.then(res => {
 				if (!res.data?.length) {
@@ -82,10 +76,10 @@
 					return
 				}
 				let htmlStr = '';
-				res.data.forEach(({ keywords, ch, eng }, index) => {
+				res.data.forEach(({ title, ch, eng }, index) => {
 					htmlStr += `
 					<div class="context">
-						<p>${keywords} Example ${index+1}：</p>
+						<p>${title} Example ${index + 1}：</p>
 						<p>${ch}</p>
 						<p>${eng}</p>
 					</div>
@@ -93,22 +87,10 @@
 				})
 				$('#container').html(htmlStr);
 			})
-
-		// grammatical deviation, semantic deviation, deviation of register, parallel structure ，repetition
-		keyclass = key.split("+")[0].toLowerCase();
-
-		if (keyclass != "grammatical" && keyclass != "semantic" && keyclass != "deviation" && keyclass != "parallel" && keyclass != "repetition") {
-			keyclass = "error"
+		document.getElementById('go').onclick = () => {
+			const val = $('#key').val()
+			window.location.replace(`/search.html?key=${val}`)
 		}
-
-		$(document).ready(function () {
-			$(".context").hide()
-			$("." + keyclass).show()
-			$(".searchtitle").html(key.replace("+", " "))
-			$(".searchinput").val(key.replace("+", " "))
-
-		});
-
 
 	</script>
 </body>

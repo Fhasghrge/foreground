@@ -37,8 +37,9 @@
     <br>
     <div class="searchbox">
       <form action="search.html" method="get">
-        <input name="key" type="text" value="Search for Parallelism or Deviation">
-        <input name="go" type="image" src="images/search.png"></form>
+        <input id="key" name="key" type="text" placeholder="Search for Parallelism or Deviation">
+        <img id="go" src="images/search.png" />
+      </form>
     </div>
 
     <div class="book">
@@ -51,7 +52,13 @@
 
   <br>
   <br>
-
+	<script src="js/jquery-1.10.1.js"></script>
+  <script>
+    document.getElementById('go').onclick = () => {
+			const val = $('#key').val()
+      window.location.replace(`/search.html?key=${encodeURIComponent(val)}`)
+		}
+  </script>
 
 </body>
 

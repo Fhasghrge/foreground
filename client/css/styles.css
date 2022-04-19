@@ -205,10 +205,11 @@ header {
   color: #ffffff;
   font-size: 16px;
 }
-.searchbox input[name="go"] {
+.searchbox #go {
   width: 30px;
   margin-top: 5px;
   height: auto;
+  display: block;
   vertical-align: middle;
   border: none;
   float: right;
