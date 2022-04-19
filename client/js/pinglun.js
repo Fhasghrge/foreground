@@ -48,18 +48,18 @@ function dtnr(message, date, id) {
   cs.innerHTML = 'Delete'
   divda.appendChild(cs);
   cs.onclick = function () {
-    var pd = confirm('Do you want to delete this comment');
-    if (pd) {
+    var pd = prompt('Do you want to delete this comment, enter your password:');
+    if (String(pd) === 'foregrounding') {
       fetch(`/api/deleteMessage?id=${id}`)
         .then(res => res.json())
         .then(res => {
-          console.log(res);
           if (res.errcode === 0) {
             window.location.reload()
           }
         })
+    }else {
+      console.log('error password')
     }
-
   }
 }
 

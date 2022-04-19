@@ -9,8 +9,11 @@ router.get('/search', async (req, res) => {
       message: 'invalid keyword'
     })
   }
-  const matchRes = data.filter(({ keywords }) => keywords.includes(keyword));
-
+  const matchRes = data.filter(
+    ({ keywords }) => 
+      String(keywords).toLocaleLowerCase().includes(String(keyword).toLocaleLowerCase()
+    )
+  )
   res.json({
     errcode: 0,
     data: matchRes
